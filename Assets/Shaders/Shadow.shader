@@ -2,7 +2,7 @@
     Properties {
         _CameraTex ("Camera texture", 2D) = "white" {}
         _ShadowIntensity("Shadow Intensity", Range(0, 1)) = 0.3
-        _ShadowEdge("Shadow Edge", Range(-0.1, 0.1)) = 0.005
+        _ShadowEdge("Shadow Edge", Range(-0.01, 0.01)) = 0.005
     }
     SubShader {
         Pass {
