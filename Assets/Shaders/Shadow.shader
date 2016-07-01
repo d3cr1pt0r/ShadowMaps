@@ -1,6 +1,8 @@
 ﻿Shader "d3cr1pt0r/Shadow" {
     Properties {
         _CameraTex ("Camera texture", 2D) = "white" {}
+        _ShadowIntensity("Shadow Intensity", Range(0, 1)) = 0.3
+        _ShadowEdge("Shadow Edge", Range(-0.1, 0.1)) = 0.005
     }
     SubShader {
         Pass {
@@ -13,6 +15,8 @@
 
             uniform sampler2D _CameraTex;
             uniform float4x4 lightMatrix;
+            fixed _ShadowIntensity;
+            fixed _ShadowEdge;
 
             struct appdata {
                 float4 vertex : POSITION;
@@ -46,7 +50,9 @@
                 float lightDepth = tex2D(_CameraTex, fixed2(coords.x, 1.0 - coords.y)).g;
                 float depth = coords.z;
 
-                if (depth < lightDepth + 0.005) {
+                fixed shadowAmount = step(depth, lightDepth + _ShadowEdge) + 1.0 - _ShadowIntensity;
+                return fixed4(shadowAmount, shadowAmount, shadowAmount, 1.0);
+                if (depth < lightDepth + _ShadowEdge) {
                     return fixed4(1.0, 1.0, 1.0, 1.0);
                 } else {
                     return fixed4(0.3, 0.3, 0.3, 1.0);
