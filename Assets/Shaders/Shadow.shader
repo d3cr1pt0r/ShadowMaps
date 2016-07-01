@@ -20,13 +20,11 @@
 
             struct appdata {
                 float4 vertex : POSITION;
-				float2 uv : TEXCOORD0;
             };
 
             struct v2f
             {
                 float4 pos : SV_POSITION;
-        		float2 uv : TEXCOORD0;
         		float3 worldPos : COLOR0;
             };
 
@@ -40,23 +38,19 @@
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 coords = mul(lightMatrix, fixed4(i.worldPos, 1.0));
-                coords /= coords.w;
+                fixed4 uvs = mul(lightMatrix, fixed4(i.worldPos, 1.0));
 
-                coords.x = (coords.x + 1.0) / 2.0;
-                coords.y = (coords.y + 1.0) / 2.0;
-                coords.z = (coords.z + 1.0) / 2.0;
+                uvs /= uvs.w;
+                uvs.x = (uvs.x + 1.0) * 0.5;
+                uvs.y = (uvs.y + 1.0) * 0.5;
+                uvs.z = (uvs.z + 1.0) * 0.5;
 
-                float lightDepth = tex2D(_CameraTex, fixed2(coords.x, 1.0 - coords.y)).g;
-                float depth = coords.z;
+                float lightDepth = tex2D(_CameraTex, fixed2(uvs.x, 1.0 - uvs.y)).g;
+                float pixelDepth = uvs.z;
 
-                fixed shadowAmount = step(depth, lightDepth + _ShadowEdge) + 1.0 - _ShadowIntensity;
+                fixed shadowAmount = step(pixelDepth, lightDepth + _ShadowEdge) + 1.0 - _ShadowIntensity;
+
                 return fixed4(shadowAmount, shadowAmount, shadowAmount, 1.0);
-                if (depth < lightDepth + _ShadowEdge) {
-                    return fixed4(1.0, 1.0, 1.0, 1.0);
-                } else {
-                    return fixed4(0.3, 0.3, 0.3, 1.0);
-                }
             }
             ENDCG
 
