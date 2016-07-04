@@ -41,9 +41,7 @@
                 fixed4 uvs = mul(lightMatrix, fixed4(i.worldPos, 1.0));
 
                 uvs /= uvs.w;
-                uvs.x = (uvs.x + 1.0) * 0.5;
-                uvs.y = (uvs.y + 1.0) * 0.5;
-                uvs.z = (uvs.z + 1.0) * 0.5;
+                uvs.xyz = (uvs.xyz + 1.0) * 0.5;
 
                 float lightDepth = tex2D(_CameraTex, fixed2(uvs.x, uvs.y)).g;
                 float pixelDepth = uvs.z;
