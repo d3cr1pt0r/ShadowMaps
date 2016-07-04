@@ -45,7 +45,7 @@
                 uvs.y = (uvs.y + 1.0) * 0.5;
                 uvs.z = (uvs.z + 1.0) * 0.5;
 
-                float lightDepth = tex2D(_CameraTex, fixed2(uvs.x, 1.0 - uvs.y)).g;
+                float lightDepth = tex2D(_CameraTex, fixed2(uvs.x, uvs.y)).g;
                 float pixelDepth = uvs.z;
 
                 fixed shadowAmount = step(pixelDepth, lightDepth + _ShadowEdge) + 1.0 - _ShadowIntensity;

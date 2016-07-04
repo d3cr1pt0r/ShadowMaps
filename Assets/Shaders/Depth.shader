@@ -31,7 +31,6 @@
         v2f o;
         o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
         o.projPos = ComputeScreenPos(o.pos);
-        o.projPos.y = 1 - o.projPos.y;
 
         return o;
       }
